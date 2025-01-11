@@ -27,7 +27,7 @@ void tokenizeString(std::vector<std::string> &outTokens, const std::string &str)
   }
 }
 
-void echo(std::vector<std::string> &tokens)
+void echo(const std::vector<std::string> &tokens)
 {
   std::string temp = "";
   for (int i = 1; i < tokens.size(); ++i)
@@ -35,6 +35,36 @@ void echo(std::vector<std::string> &tokens)
     temp += tokens[i] + " ";
   }
   std::cout << temp << std::endl;
+}
+
+void processCommand(const std::vector<std::string> &tokens)
+{
+  if (validCommand(tokens[0]))
+  {
+    if (tokens[0] == "exit")
+    {
+      exit(std::stoi(tokens[1]));
+    }
+    else if (tokens[0] == "echo")
+    {
+      echo(tokens);
+    }
+    else if (tokens[0] == "type")
+    {
+      if (validCommand(tokens[1]))
+      {
+        std::cout << tokens[1] << " is a shell builtin" << std::endl;
+      }
+      else
+      {
+        std::cout << tokens[1] << ": not found" << std::endl;
+      }
+    }
+  }
+  else
+  {
+    std::cout << tokens[0] << ": command not found" << std::endl;
+  }
 }
 
 int main()
@@ -52,33 +82,7 @@ int main()
 
     std::vector<std::string> tokens;
     tokenizeString(tokens, input);
-
-    if (validCommand(tokens[0]))
-    {
-      if (tokens[0] == "exit")
-      {
-        exit(std::stoi(tokens[1]));
-      }
-      else if (tokens[0] == "echo")
-      {
-        echo(tokens);
-      }
-      else if (tokens[0] == "type")
-      {
-        if (validCommand(tokens[1]))
-        {
-          std::cout << tokens[1] << " is a shell builtin" << std::endl;
-        }
-        else
-        {
-          std::cout << tokens[1] << ": not found" << std::endl;
-        }
-      }
-    }
-    else
-    {
-      std::cout << input << ": command not found" << std::endl;
-    }
+    processCommand(tokens);
 
   } while (input != "");
 }
