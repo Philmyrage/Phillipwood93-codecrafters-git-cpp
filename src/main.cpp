@@ -13,7 +13,6 @@ bool validCommand(const std::string &cmd)
       return true;
     }
   }
-  std::cout << cmd << ": command not found" << std::endl;
   return valid;
 }
 
@@ -26,6 +25,18 @@ int main()
   std::cout << "$ ";
 
   std::string input;
-  std::getline(std::cin, input);
-  validCommand(input);
+  do
+  {
+    std::getline(std::cin, input);
+    if (validCommand(input))
+    {
+      // TODO: Handle valid commands...
+    }
+    else
+    {
+      std::cout << input << ": command not found" << std::endl;
+      std::cout << "$ ";
+    }
+
+  } while (input != "");
 }
