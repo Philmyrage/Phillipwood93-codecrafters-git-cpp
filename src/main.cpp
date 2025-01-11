@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <sstream>
+#include "main.h"
 
 std::vector<std::string> commands = {"exit", "echo"};
 
@@ -27,6 +28,16 @@ void tokenizeString(std::vector<std::string> &outTokens, const std::string &str)
   }
 }
 
+void echo(std::vector<std::string> &tokens)
+{
+  std::string temp = "";
+  for (int i = 1; i < tokens.size(); ++i)
+  {
+    temp += tokens[i] + " ";
+  }
+  std::cout << temp << std::endl;
+}
+
 int main()
 {
   std::string input;
@@ -51,13 +62,7 @@ int main()
       }
       else if (tokens[0] == "echo")
       {
-        // #FIXME: bash ignores white space and adds it's own white space. I should loop tokens here.
-        std::string temp = "";
-        for (int i = 1; i < tokens.size(); ++i)
-        {
-          temp += tokens[i] + " ";
-        }
-        std::cout << temp << std::endl;
+        echo(tokens);
       }
     }
     else
