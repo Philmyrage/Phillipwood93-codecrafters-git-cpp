@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <sstream>
-#include "main.h"
 
 std::vector<std::string> commands = {"exit", "echo"};
 
