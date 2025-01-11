@@ -2,7 +2,7 @@
 #include <vector>
 #include <sstream>
 
-std::vector<std::string> commands = {"exit"};
+std::vector<std::string> commands = {"exit", "echo"};
 
 bool validCommand(const std::string &cmd)
 {
@@ -29,15 +29,15 @@ void tokenizeString(std::vector<std::string> &outTokens, const std::string &str)
 
 int main()
 {
-  // Flush after every std::cout / std:cerr
-  std::cout << std::unitbuf;
-  std::cerr << std::unitbuf;
-
-  std::cout << "$ ";
-
   std::string input;
   do
   {
+    // Flush after every std::cout / std:cerr
+    std::cout << std::unitbuf;
+    std::cerr << std::unitbuf;
+
+    std::cout << "$ ";
+
     std::getline(std::cin, input);
 
     std::vector<std::string> tokens;
@@ -49,11 +49,21 @@ int main()
       {
         exit(std::stoi(tokens[1]));
       }
+      else if (tokens[0] == "echo")
+      {
+        // #FIXME: bash ignores white space and adds it's own white space. I should loop tokens here.
+        std::string temp = "";
+        for (int i = 1; i < tokens.size(); ++i)
+        {
+          temp += tokens[i] + " ";
+        }
+        std::cout << temp << std::endl;
+      }
     }
     else
     {
       std::cout << input << ": command not found" << std::endl;
-      std::cout << "$ ";
+      // std::cout << "$ ";
     }
 
   } while (input != "");
