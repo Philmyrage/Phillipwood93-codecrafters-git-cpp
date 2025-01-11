@@ -17,6 +17,16 @@ bool validCommand(const std::string &cmd)
   return valid;
 }
 
+void tokenizeString(std::vector<std::string> &outTokens, const std::string &str)
+{
+  std::stringstream inputStream(str);
+  std::string temp;
+  while (inputStream >> temp)
+  {
+    outTokens.push_back(temp);
+  }
+}
+
 int main()
 {
   // Flush after every std::cout / std:cerr
@@ -31,12 +41,7 @@ int main()
     std::getline(std::cin, input);
 
     std::vector<std::string> tokens;
-    std::stringstream inputStream(input);
-    std::string temp;
-    while (inputStream >> temp)
-    {
-      tokens.push_back(temp);
-    }
+    tokenizeString(tokens, input);
 
     if (validCommand(tokens[0]))
     {
