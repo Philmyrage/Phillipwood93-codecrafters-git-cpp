@@ -2,7 +2,7 @@
 #include <vector>
 #include <sstream>
 
-std::vector<std::string> commands = {"exit", "echo"};
+std::vector<std::string> commands = {"exit", "echo", "type"};
 
 bool validCommand(const std::string &cmd)
 {
@@ -63,11 +63,21 @@ int main()
       {
         echo(tokens);
       }
+      else if (tokens[0] == "type")
+      {
+        if (validCommand(tokens[1]))
+        {
+          std::cout << tokens[1] << " is a shell builtin" << std::endl;
+        }
+        else
+        {
+          std::cout << tokens[1] << ": not found" << std::endl;
+        }
+      }
     }
     else
     {
       std::cout << input << ": command not found" << std::endl;
-      // std::cout << "$ ";
     }
 
   } while (input != "");
