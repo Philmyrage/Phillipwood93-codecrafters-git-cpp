@@ -1,7 +1,8 @@
 #include <iostream>
 #include <vector>
+#include <sstream>
 
-std::vector<std::string> commands = {};
+std::vector<std::string> commands = {"exit"};
 
 bool validCommand(const std::string &cmd)
 {
@@ -28,9 +29,21 @@ int main()
   do
   {
     std::getline(std::cin, input);
-    if (validCommand(input))
+
+    std::vector<std::string> tokens;
+    std::stringstream inputStream(input);
+    std::string temp;
+    while (inputStream >> temp)
     {
-      // TODO: Handle valid commands...
+      tokens.push_back(temp);
+    }
+
+    if (validCommand(tokens[0]))
+    {
+      if (tokens[0] == "exit")
+      {
+        exit(std::stoi(tokens[1]));
+      }
     }
     else
     {
