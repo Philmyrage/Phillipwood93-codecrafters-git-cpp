@@ -13,7 +13,7 @@ bool validCommand(const std::string &cmd)
       return true;
     }
   }
-  std::cout << cmd << " command not found" << std::endl;
+  std::cout << cmd << ": command not found" << std::endl;
   return valid;
 }
 
