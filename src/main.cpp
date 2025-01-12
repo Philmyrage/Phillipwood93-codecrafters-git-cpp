@@ -8,7 +8,7 @@
 // #include <unistd.h>
 
 std::vector<std::string>
-    commands = {"exit", "echo", "type"};
+    commands = {"exit", "echo", "type", "pwd"};
 
 bool validCommand(const std::string &cmd)
 {
@@ -109,6 +109,10 @@ void processCommand(const std::vector<std::string> &tokens)
       {
         std::cout << tokens[1] << ": not found" << std::endl;
       }
+    }
+    else if (tokens[0] == "pwd")
+    {
+      std::cout << std::filesystem::current_path().string() << std::endl;
     }
   }
   else if (searchPath(tokens[0]).first) // if its a command in the path.
