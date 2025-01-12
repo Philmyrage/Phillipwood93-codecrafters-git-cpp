@@ -40,6 +40,45 @@ void echo(const std::vector<std::string> &tokens)
   std::cout << temp << std::endl;
 }
 
+void splitString(std::vector<std::string> &outTokens, const std::string &str, const char &delimiter = ':')
+{
+  std::string temp = "";
+  for (int i = 0; i < str.size(); ++i)
+  {
+    if (str[i] != delimiter)
+    {
+      temp += str[i];
+    }
+    if (i == str.size() - 1 || str[i] == delimiter)
+    {
+      outTokens.push_back(temp);
+      temp = "";
+    }
+  }
+}
+
+std::pair<bool, std::string> searchPath(const std::string &cmd)
+{
+  std::vector<std::string> pathTokens;
+  std::string pathEnv = getenv("PATH");
+  splitString(pathTokens, pathEnv);
+
+  for (int i = 0; i < pathTokens.size(); ++i)
+  {
+    for (const auto &dir : std::filesystem::directory_iterator(pathTokens[i]))
+    {
+      std::string t = dir.path().c_str();
+      size_t i = t.find_last_of("/");
+      t = t.substr(i + 1, t.size());
+      if (t == cmd)
+      {
+        return std::pair(true, dir.path().c_str());
+      }
+    }
+  }
+  return std::pair(false, "");
+}
+
 void processCommand(const std::vector<std::string> &tokens)
 {
   if (validCommand(tokens[0]))
@@ -58,6 +97,11 @@ void processCommand(const std::vector<std::string> &tokens)
       {
         std::cout << tokens[1] << " is a shell builtin" << std::endl;
       }
+      else if (searchPath(tokens[1]).first)
+      {
+        // TODO: Implement
+        std::cout << tokens[1] << " found on path" << std::endl;
+      }
       else
       {
         std::cout << tokens[1] << ": not found" << std::endl;
@@ -70,28 +114,8 @@ void processCommand(const std::vector<std::string> &tokens)
   }
 }
 
-void splitString(std::vector<std::string> &outTokens, const std::string &str, const char &delimiter = ':')
-{
-  std::string temp = "";
-  for (int i = 0; i < str.size(); ++i)
-  {
-    if (str[i] != delimiter)
-    {
-      temp += str[i];
-    }
-    if (i == str.size() - 1 || str[i] == delimiter)
-    {
-      outTokens.push_back(temp);
-      temp = "";
-    }
-  }
-}
-
 int main(int argc, char *argv[])
 {
-  std::vector<std::string> pathTokens;
-  std::string pathEnv = getenv("PATH");
-  splitString(pathTokens, pathEnv);
 
   std::string input;
   do
