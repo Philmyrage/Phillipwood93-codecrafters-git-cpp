@@ -100,7 +100,6 @@ void processCommand(const std::vector<std::string> &tokens)
       }
       else if (searchedPair.first)
       {
-        // TODO: Implement
         std::cout << tokens[1] << " is " << searchedPair.second << std::endl;
       }
       else
