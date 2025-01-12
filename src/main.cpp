@@ -7,10 +7,11 @@
 #include <sys/wait.h>
 // #include <unistd.h>
 
-std::vector<std::string>
-    commands = {"exit", "echo", "type", "pwd"};
+#include "commands.hpp"
 
-bool validCommand(const std::string &cmd)
+std::vector<std::string> commands = {"exit", "echo", "type", "pwd"};
+
+const bool validCommand(const std::string &cmd)
 {
   bool valid = false;
   for (int i = 0; i < commands.size(); ++i)
@@ -33,7 +34,7 @@ void tokenizeString(std::vector<std::string> &outTokens, const std::string &str)
   }
 }
 
-void echo(const std::vector<std::string> &tokens)
+const void echo(const std::vector<std::string> &tokens)
 {
   std::string temp = "";
   for (int i = 1; i < tokens.size(); ++i)
@@ -140,8 +141,9 @@ void processCommand(const std::vector<std::string> &tokens)
   }
 }
 
-int main(int argc, char *argv[])
+int main()
 {
+  Commands cmdHandler = Commands();
 
   std::string input;
   do
@@ -154,9 +156,11 @@ int main(int argc, char *argv[])
 
     std::getline(std::cin, input);
 
-    std::vector<std::string> tokens;
-    tokenizeString(tokens, input);
-    processCommand(tokens);
+    cmdHandler.processCommand(input);
+
+    // std::vector<std::string> tokens;
+    // tokenizeString(tokens, input);
+    // processCommand(tokens);
 
   } while (input != "");
 }
