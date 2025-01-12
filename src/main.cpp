@@ -93,14 +93,15 @@ void processCommand(const std::vector<std::string> &tokens)
     }
     else if (tokens[0] == "type")
     {
+      std::pair<bool, std::string> searchedPair = searchPath(tokens[1]);
       if (validCommand(tokens[1]))
       {
         std::cout << tokens[1] << " is a shell builtin" << std::endl;
       }
-      else if (searchPath(tokens[1]).first)
+      else if (searchedPair.first)
       {
         // TODO: Implement
-        std::cout << tokens[1] << " found on path" << std::endl;
+        std::cout << tokens[1] << " is " << searchedPair.second << std::endl;
       }
       else
       {
