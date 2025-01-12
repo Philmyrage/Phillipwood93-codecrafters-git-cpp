@@ -3,6 +3,9 @@
 #include <sstream>
 #include <filesystem>
 #include <cstdlib>
+#include <sys/types.h>
+#include <sys/wait.h>
+// #include <unistd.h>
 
 std::vector<std::string>
     commands = {"exit", "echo", "type"};
@@ -107,6 +110,25 @@ void processCommand(const std::vector<std::string> &tokens)
         std::cout << tokens[1] << ": not found" << std::endl;
       }
     }
+  }
+  else if (searchPath(tokens[0]).first) // if its a command in the path.
+  {
+    pid_t pid = fork();
+    if (pid == -1)
+    {
+      std::cerr << "Error, could not create fork." << std::endl;
+    }
+    if (pid == 0)
+    {
+      char *argv[tokens.size()];
+      for (int i = 0; i < tokens.size(); ++i)
+      {
+        argv[i] = const_cast<char *>(tokens[i].c_str());
+      }
+      execvp(tokens[0].c_str(), argv + 1);
+      std::cerr << "Error: exec failed" << std::endl;
+    }
+    waitpid(pid, NULL, 0);
   }
   else
   {
