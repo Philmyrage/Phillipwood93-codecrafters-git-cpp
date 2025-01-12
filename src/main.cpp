@@ -125,7 +125,7 @@ void processCommand(const std::vector<std::string> &tokens)
       {
         argv[i] = const_cast<char *>(tokens[i].c_str());
       }
-      execvp(tokens[0].c_str(), argv + 1);
+      execvp(tokens[0].c_str(), argv);
       std::cerr << "Error: exec failed" << std::endl;
     }
     waitpid(pid, NULL, 0);
