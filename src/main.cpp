@@ -1,8 +1,11 @@
 #include <iostream>
 #include <vector>
 #include <sstream>
+#include <filesystem>
+#include <cstdlib>
 
-std::vector<std::string> commands = {"exit", "echo", "type"};
+std::vector<std::string>
+    commands = {"exit", "echo", "type"};
 
 bool validCommand(const std::string &cmd)
 {
@@ -67,8 +70,29 @@ void processCommand(const std::vector<std::string> &tokens)
   }
 }
 
-int main()
+void splitString(std::vector<std::string> &outTokens, const std::string &str, const char &delimiter = ':')
 {
+  std::string temp = "";
+  for (int i = 0; i < str.size(); ++i)
+  {
+    if (str[i] != delimiter)
+    {
+      temp += str[i];
+    }
+    if (i == str.size() - 1 || str[i] == delimiter)
+    {
+      outTokens.push_back(temp);
+      temp = "";
+    }
+  }
+}
+
+int main(int argc, char *argv[])
+{
+  std::vector<std::string> pathTokens;
+  std::string pathEnv = getenv("PATH");
+  splitString(pathTokens, pathEnv);
+
   std::string input;
   do
   {
