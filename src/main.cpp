@@ -156,11 +156,11 @@ int main()
 
     std::getline(std::cin, input);
 
-    cmdHandler.processCommand(input);
+    // cmdHandler.processCommand(input);
 
-    // std::vector<std::string> tokens;
-    // tokenizeString(tokens, input);
-    // processCommand(tokens);
+    std::vector<std::string> tokens;
+    tokenizeString(tokens, input);
+    processCommand(tokens);
 
   } while (input != "");
 }
