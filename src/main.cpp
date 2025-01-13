@@ -8,7 +8,19 @@
 
 #include "commands.hpp"
 
-std::vector<std::string> commands = {"exit", "echo", "type", "pwd"};
+std::vector<std::string> commands = {"exit", "echo", "type", "pwd", "cd"};
+
+void changeDirectory(const std::vector<std::string> &inTokens)
+{
+  if (std::filesystem::exists(inTokens[1]))
+  {
+    std::filesystem::current_path(inTokens[1]);
+  }
+  else
+  {
+    std::cerr << "cd: " << inTokens[1] << ": No such file or directory" << std::endl;
+  }
+}
 
 const bool validCommand(const std::string &cmd)
 {
@@ -114,6 +126,10 @@ void processCommand(const std::vector<std::string> &tokens)
     {
       std::cout << std::filesystem::current_path().string() << std::endl;
     }
+    else if (tokens[0] == "cd")
+    {
+      changeDirectory(tokens);
+    }
   }
   else if (searchPath(tokens[0]).first) // if its a command in the path.
   {
@@ -122,7 +138,7 @@ void processCommand(const std::vector<std::string> &tokens)
     {
       std::cerr << "Error, could not create fork." << std::endl;
     }
-    if (pid == 0)
+    else if (pid == 0)
     {
       char *argv[tokens.size()];
       for (int i = 0; i <= tokens.size(); ++i)
@@ -131,8 +147,12 @@ void processCommand(const std::vector<std::string> &tokens)
       }
       execvp(tokens[0].c_str(), argv);
       std::cerr << "Error: exec failed" << std::endl;
+      exit(1);
     }
-    waitpid(pid, NULL, 0);
+    else
+    {
+      waitpid(pid, NULL, 0);
+    }
   }
   else
   {
@@ -142,7 +162,6 @@ void processCommand(const std::vector<std::string> &tokens)
 
 int main()
 {
-
   std::string input;
   do
   {

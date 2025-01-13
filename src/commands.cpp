@@ -61,9 +61,9 @@ void Commands::splitString(std::vector<std::string> &outTokens, const std::strin
 
 std::pair<bool, std::string> Commands::searchPath(const std::string &cmd)
 {
+
     std::vector<std::string> pathTokens;
-    std::string pathEnv = getenv("PATH");
-    splitString(pathTokens, pathEnv);
+    splitString(pathTokens, std::getenv("PATH"));
 
     for (int i = 0; i < pathTokens.size(); ++i)
     {
