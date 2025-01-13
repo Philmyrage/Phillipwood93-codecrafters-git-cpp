@@ -5,7 +5,6 @@
 #include <cstdlib>
 #include <sys/types.h>
 #include <sys/wait.h>
-// #include <unistd.h>
 
 #include "commands.hpp"
 
@@ -126,7 +125,7 @@ void processCommand(const std::vector<std::string> &tokens)
     if (pid == 0)
     {
       char *argv[tokens.size()];
-      for (int i = 0; i < tokens.size(); ++i)
+      for (int i = 0; i <= tokens.size(); ++i)
       {
         argv[i] = const_cast<char *>(tokens[i].c_str());
       }
@@ -143,20 +142,17 @@ void processCommand(const std::vector<std::string> &tokens)
 
 int main()
 {
-  Commands cmdHandler = Commands();
 
   std::string input;
   do
   {
-    // Flush after every std::cout / std:cerr
+    //  Flush after every std::cout / std:cerr
     std::cout << std::unitbuf;
     std::cerr << std::unitbuf;
 
     std::cout << "$ ";
 
     std::getline(std::cin, input);
-
-    // cmdHandler.processCommand(input);
 
     std::vector<std::string> tokens;
     tokenizeString(tokens, input);

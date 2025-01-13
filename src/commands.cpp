@@ -22,6 +22,8 @@ const bool Commands::validCommand(const std::string &cmd)
 
 void Commands::tokenizeString(std::vector<std::string> &outTokens, const std::string &str)
 {
+    outTokens.clear();
+
     std::stringstream inputStream(str);
     std::string temp;
     while (inputStream >> temp)
@@ -79,11 +81,8 @@ std::pair<bool, std::string> Commands::searchPath(const std::string &cmd)
     return std::pair(false, "");
 }
 
-void Commands::processCommand(const std::string &str)
+void Commands::processCommand(const std::vector<std::string> &tokens)
 {
-    tokens.clear();
-    tokenizeString(tokens, str);
-
     if (validCommand(tokens[0]))
     {
         if (tokens[0] == "exit")
@@ -117,6 +116,11 @@ void Commands::processCommand(const std::string &str)
     }
     else if (searchPath(tokens[0]).first) // if its a command in the path.
     {
+        char *argv[tokens.size()];
+        for (int i = 0; i < tokens.size(); ++i)
+        {
+            argv[i] = const_cast<char *>(tokens[i].c_str());
+        }
         pid_t pid = fork();
         if (pid == -1)
         {
@@ -125,14 +129,9 @@ void Commands::processCommand(const std::string &str)
         }
         if (pid == 0)
         {
-            char *argv[tokens.size()];
-            for (int i = 0; i < tokens.size(); ++i)
-            {
-                argv[i] = const_cast<char *>(tokens[i].c_str());
-            }
             execvp(tokens[0].c_str(), argv);
-            std::cerr << "Error: exec failed" << std::endl;
-            return;
+            std::cerr << "Error: exec failed!" << std::endl;
+            kill(pid, 1);
         }
         waitpid(pid, NULL, 0);
     }
